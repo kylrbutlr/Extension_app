@@ -10,8 +10,22 @@ Which search engine is the best? This simple question is at the core of multiple
 
 In this project, we will use user interactions with each search engine to better understand the effectiveness of each platform. First, the methods of search engine evaluation should be researched and adapted to this project. Second, a system (i.e. a browser extension) should be used to record data from the user: pages returned, links clicked, query chains, type of query, modifications to the original query, and  time taken to find resource. Third, the data collected by the browser extension should be sent to the cloud and analyzed using data mining. 
 
-### Browser Specifications:
+### Browser Extension Specifications:
 
+The Data structure (seen below) that is sent from the content script to the background script is of the following form:
+```javascript
+{
+    type: "ClickedLink", //Type of the event of the message sent
+    href: "", // Url clicked by the user
+    query: "", // query entered by the user
+    searchResults: [], // search results from the search engine
+    engine: "", // The search engine that is used
+    timeClicked: <timeStamp> // The time thw user clicked the url
+    currentPage: <int>, // The page of the results from the search engine
+    userId : "" // Unique Id of the user
+}
+```
+When the user clicks a link on the search engine results page this object is sent to the background script.
 (not finalized yet)
 
 ### Data mining and Cloud Computing Specifications:
