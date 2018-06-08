@@ -32,3 +32,19 @@ When the user clicks a link on the search engine results page this object is sen
 
 (not finalized yet)
 
+## References:
+
+[Optimizing Search Engines using Clickthrough Data](https://www.cs.cornell.edu/people/tj/publications/joachims_02c.pdf)
+
+[Personal Evaluations of Search Engines](https://www.cs.uic.edu/~liub/searchEval/SearchEngineEvaluation.htm)
+
+[Analysis of a Very Large Web Search Engine Query Log](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.83.8477&rep=rep1&type=pdf)
+
+[Understanding User Goals in Web Search](http://www.ambuehler.ethz.ch/CDstore/www2004/docs/1p13.pdf)
+
+[Accurately Interpreting Clickthrough Data as Implicit Feedback](https://www.cs.cornell.edu/people/tj/publications/joachims_etal_05a.pdf)
+
+[Query Chains: Learning to Rank from Implicit Feedback](https://www.cs.cornell.edu/people/tj/publications/radlinski_joachims_05a.pdf)
+
+[Evaluating the retrieval effectiveness of Web search engines using a representative query sample](https://pdfs.semanticscholar.org/0d2e/113b190000807799d4cd623231aca816809b.pdf)
+
