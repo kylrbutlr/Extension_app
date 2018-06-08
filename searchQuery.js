@@ -25,15 +25,21 @@ for (var i = 0; i < queries.length; i++) {
     queries[i].getElementsByTagName('a')[0].onclick = foo;
     results.push(queries[i].getElementsByTagName('a')[0].href);
 }
-chrome.runtime.sendMessage({type: "searchQuery", 
+/*chrome.runtime.sendMessage({type: "searchQuery", 
 query: searchForm[0][0].value,
 searchResults: results,
-currentPage: cur});
+currentPage: cur});*/
 
 function foo (element){
     //alert(this.href);
     var ref = this.href;
-    chrome.runtime.sendMessage({type: "ClickedLink", href: ref});
+    chrome.runtime.sendMessage({type: "ClickedLink", 
+    href: ref,
+    query: searchForm[0][0].value,
+    searchResults: results,
+    currentPage: cur,
+    userId : ""
+    });
     //alert(ref);
    /* chrome.storage.sync.get('Query', function(data) {
         console.log(data.Query);

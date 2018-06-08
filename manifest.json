@@ -2,7 +2,7 @@
     "name": "Query Logger",
     "version": "1.0",
     "description": "Build an Extension!",
-    "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "history","webRequest"] ,
+    "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "history","webRequest","identity"] ,
     "background": {
       "scripts": ["background.js"],
       "persistent": true

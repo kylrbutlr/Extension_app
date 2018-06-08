@@ -1,3 +1,9 @@
+var userId; 
+chrome.identity.getProfileUserInfo(function(temp){
+    console.log(temp);
+});
+
+
 var data = {
   query: {},
   results: [],
@@ -27,9 +33,9 @@ chrome.tabs.onRemoved.addListener(function (tabId, selectInfo){
 });
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.type == "ClickedLink"){
-      data.clickedResults.push(request.href);
+     console.log(request);
     }
-    else if (request.type == "searchQuery"){
+    /*else if (request.type == "searchQuery"){
       var obj = {};
       obj[request.currentPage.toString()] =  request.searchResults;
       console.log(typeof(data.query[request.query.toString()]));
@@ -46,7 +52,7 @@ chrome.tabs.onRemoved.addListener(function (tabId, selectInfo){
       }
 
       
-    }
+    }*/
       
 
     sendResponse();
