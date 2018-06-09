@@ -1,4 +1,4 @@
-var userId; 
+const userId = Math.floor(Math.random()*100000); 
 chrome.identity.getProfileUserInfo(function(temp){
     console.log(temp);
 });
@@ -33,7 +33,11 @@ chrome.tabs.onRemoved.addListener(function (tabId, selectInfo){
 });
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.type == "ClickedLink"){
-     console.log(request);
+      var date = new Date();
+      var timestamp = date.getTime();
+      request.timestamp = timestamp;
+      request.userId = userId;
+      console.log(request);
     }
     /*else if (request.type == "searchQuery"){
       var obj = {};

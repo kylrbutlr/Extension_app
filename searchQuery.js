@@ -5,6 +5,9 @@ let searchForm = document.getElementsByClassName("cdr_frm");
 let cur = parseInt(document.querySelector('td.cur').textContent);
 let results = [];
 
+// query for Bing document.getElementById('sb_form_q').value;
+
+
 //document.body.style.setProperty("-webkit-transform", "rotate(-180deg)", null);
 
 //alert(cur);
@@ -37,6 +40,7 @@ function foo (element){
     href: ref,
     query: searchForm[0][0].value,
     searchResults: results,
+    timestamp: 0,
     currentPage: cur,
     userId : ""
     });
