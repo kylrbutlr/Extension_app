@@ -11,6 +11,14 @@
       {
         "matches": ["https://www.google.com/*"],
         "js": ["searchQuery.js"]
+      },
+      {
+        "matches": ["https://www.bing.com/*"],
+        "js": ["sQBing.js"]
+      },
+      {
+        "matches": ["https://search.yahoo.com/*"],
+        "js": ["sQYahoo.js"]
       }
     ],
     "browser_action": {

@@ -28,13 +28,16 @@ chrome.runtime.onInstalled.addListener(function() {
       });*/
   });
 
-chrome.tabs.onRemoved.addListener(function (tabId, selectInfo){
-  console.log(selectInfo);
-});
+
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.type == "ClickedLink"){
-      var date = new Date();
+    var date = new Date();
       var timestamp = date.getTime();
+    if (request.type == "ClickedLink"){
+      request.timestamp = timestamp;
+      request.userId = userId;
+      console.log(request);
+    }
+    else if (request.type == "searchQuery"){
       request.timestamp = timestamp;
       request.userId = userId;
       console.log(request);

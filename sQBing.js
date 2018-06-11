@@ -1,24 +1,14 @@
-let queries = document.getElementsByClassName('r');
+let queries = document.getElementsByClassName('b_algo');
 let search = document.getElementsByClassName('gsfi');
-let form = document.getElementById('tsf');
-let searchForm = document.getElementsByClassName("cdr_frm");
-let cur = parseInt(document.querySelector('td.cur').textContent);
+//let form = document.getElementById('tsf');
+//let searchForm = document.getElementsByClassName("cdr_frm");
+let cur = parseInt(document.querySelector('a.sb_pagS.sb_pagS_bp.sb_bp').textContent);
 let results = [];
-
+console.log(document.getElementById('sb_form_q').value);
 // query for Bing document.getElementById('sb_form_q').value;
 
-
-//document.body.style.setProperty("-webkit-transform", "rotate(-180deg)", null);
-
-//alert(cur);
-//console.log(google.PDb["[[Scopes]]"]["0"].s_b.s_1ga.Ka["[[Entries]]"][2].value);
-//alert(searchForm[0][0].value);
-
-
-
-//form.onSubmit = SearchesSomething;
-//console.dir(searchForm);
 //.innerText will get the hyperlink out
+
 function SearchesSomething(event){
     console.log(event);
     alert(hello);
@@ -29,7 +19,7 @@ for (var i = 0; i < queries.length; i++) {
     results.push(queries[i].getElementsByTagName('a')[0].href);
 }
 chrome.runtime.sendMessage({type: "searchQuery", 
-query: searchForm[0][0].value,
+query: document.getElementById('sb_form_q').value,
 timestamp: 0});
 
 function foo (element){
@@ -37,22 +27,13 @@ function foo (element){
     var ref = this.href;
     chrome.runtime.sendMessage({type: "ClickedLink", 
     href: ref,
-    query: searchForm[0][0].value,
+    query: document.getElementById('sb_form_q').value,
     searchResults: results,
+    engine: 'Bing',
     timestamp: 0,
-    engine: 'Google',
     currentPage: cur,
     userId : ""
     });
-    //alert(ref);
-   /* chrome.storage.sync.get('Query', function(data) {
-        console.log(data.Query);
-        data.Query.push(this.href);
-            chrome.storage.sync.set({Query: data.Query}, function() {
-                console.log(data.Query);
-                alert(ref);
-              });
-        })*/
 };
 
 
