@@ -64,3 +64,21 @@ chrome.runtime.onInstalled.addListener(function() {
 
     sendResponse();
 });
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  var str = changeInfo.url;
+  if(str){
+    if(str.startsWith("https://www.bing.com/")){
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {greeting: "Refresh_Bing"}, function(response) {
+          console.log('Good');
+        });
+      });
+    }
+    else if(str.startsWith("https://www.baidu.com/s")){
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {greeting: "Refresh_Baidu"});
+      });
+    }
+  }
+});

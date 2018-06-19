@@ -19,6 +19,10 @@
       {
         "matches": ["https://search.yahoo.com/*"],
         "js": ["sQYahoo.js"]
+      },
+      {
+        "matches": ["https://www.baidu.com/*"],
+        "js": ["sQBaidu.js"]
       }
     ],
     "browser_action": {

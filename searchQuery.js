@@ -1,20 +1,36 @@
 let queries = document.getElementsByClassName('r');
+let tab_index = document.getElementsByClassName('hdtb-msel')[0].innerText;
 let search = document.getElementsByClassName('gsfi');
 let form = document.getElementById('tsf');
-let searchForm = document.getElementsByClassName("cdr_frm");
-let cur = parseInt(document.querySelector('td.cur').textContent);
+let searchForm = document.getElementsByName("q");
+
+
+chrome.runtime.sendMessage({type: "searchQuery", 
+query: searchForm[0].value,
+tab: tab_index,
+timestamp: 0});
+
+
 let results = [];
+let vid_results = [];
+let news_results = [];
+let vids = document.getElementsByClassName('P94G9b');
+let top_stories = document.getElementsByClassName("VoEfsd");
+let cur = parseInt(document.querySelector('td.cur').textContent);
 
-// query for Bing document.getElementById('sb_form_q').value;
+for(let i = 0; i < vids.length; i++){
+    vid_results.push(vids[i].getElementsByTagName('a')[0].href);
+    vids[i].getElementsByTagName('a')[0].onclick = yell;
+}
+for(let i = 0; i < top_stories.length; i++){
+    let item = top_stories[i].getElementsByTagName('a')[0];
+    if(vid_results.indexOf(item.href) == -1){
+            news_results.push(item.href);
+            item.onclick = yell;
 
-
-//document.body.style.setProperty("-webkit-transform", "rotate(-180deg)", null);
-
-//alert(cur);
-//console.log(google.PDb["[[Scopes]]"]["0"].s_b.s_1ga.Ka["[[Entries]]"][2].value);
-//alert(searchForm[0][0].value);
-
-
+    }
+}
+console.log(news_results);
 
 //form.onSubmit = SearchesSomething;
 //console.dir(searchForm);
@@ -24,36 +40,35 @@ function SearchesSomething(event){
     alert(hello);
 }
 for (var i = 0; i < queries.length; i++) {
+    let res = queries[i].getElementsByTagName('a')[0]
     //console.log(queries[i].getElementsByTagName('a')[0].href); //second console output
-    queries[i].getElementsByTagName('a')[0].onclick = foo;
-    results.push(queries[i].getElementsByTagName('a')[0].href);
+    if(res != undefined){
+            res.onclick = foo;
+            results.push(res.href);
+        
+    }
 }
-chrome.runtime.sendMessage({type: "searchQuery", 
-query: searchForm[0][0].value,
-timestamp: 0});
+console.log(results);
 
 function foo (element){
     //alert(this.href);
     var ref = this.href;
     chrome.runtime.sendMessage({type: "ClickedLink", 
     href: ref,
-    query: searchForm[0][0].value,
+    query: searchForm[0].value,
     searchResults: results,
     timestamp: 0,
     engine: 'Google',
     currentPage: cur,
+    tab: tab_index,
     userId : ""
     });
-    //alert(ref);
-   /* chrome.storage.sync.get('Query', function(data) {
-        console.log(data.Query);
-        data.Query.push(this.href);
-            chrome.storage.sync.set({Query: data.Query}, function() {
-                console.log(data.Query);
-                alert(ref);
-              });
-        })*/
 };
+
+function yell(){
+    var ref = this.href;
+    alert(ref);
+}
 
 
 //code to send message to open notification. This will eventually move into my extension logic
