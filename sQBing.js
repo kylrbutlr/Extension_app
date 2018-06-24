@@ -3,15 +3,18 @@ function onStart(){
     let search = document.getElementsByClassName('gsfi');
     //let form = document.getElementById('tsf');
     //let searchForm = document.getElementsByClassName("cdr_frm");
-    let cur = parseInt(document.querySelector('a.sb_pagS.sb_pagS_bp.sb_bp').textContent);
+    let cur;
+    if(document.querySelector('a.sb_pagS.sb_pagS_bp.sb_bp'))
+        cur = parseInt(document.querySelector('a.sb_pagS.sb_pagS_bp.sb_bp').textContent);
+    else
+        cur = -1
     let results = [];
+    let tab_index = document.getElementsByClassName('b_active')[0].innerText;
     console.log(document.getElementById('sb_form_q').value);
     // query for Bing document.getElementById('sb_form_q').value;
 
     //.innerText will get the hyperlink out
-    window.onhashchange = function(){
-        alert('Mmmmm');
-    }
+
     function SearchesSomething(event){
         console.log(event);
         alert(hello);
@@ -28,7 +31,9 @@ function onStart(){
     console.log(results);
     chrome.runtime.sendMessage({type: "searchQuery", 
     query: document.getElementById('sb_form_q').value,
-    timestamp: 0});
+    timestamp: 0,
+    engine: 'Bing',
+    tab: tab_index});
 
     function foo (element){
         //alert(this.href);
@@ -40,6 +45,7 @@ function onStart(){
         engine: 'Bing',
         timestamp: 0,
         currentPage: cur,
+        tab: tab_index,
         userId : ""
         });
     };

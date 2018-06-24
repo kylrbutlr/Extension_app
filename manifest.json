@@ -21,7 +21,7 @@
         "js": ["sQYahoo.js"]
       },
       {
-        "matches": ["https://www.baidu.com/*"],
+        "matches": ["*://*.baidu.com/*"],
         "js": ["sQBaidu.js"]
       }
     ],

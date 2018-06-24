@@ -8,7 +8,10 @@ let searchForm = document.getElementsByName("q");
 chrome.runtime.sendMessage({type: "searchQuery", 
 query: searchForm[0].value,
 tab: tab_index,
-timestamp: 0});
+engine: 'Google',
+timestamp: 0,
+userId : ""
+});
 
 
 let results = [];
