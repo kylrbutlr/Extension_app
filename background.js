@@ -1,33 +1,17 @@
+
+/**@author Kyler Butler
+ * This is the user id that associates the session with the a user.
+ * Once the user closes the browser and later opens a new window the 
+ * id will reset. 
+ */
+
 const userId = Math.floor(Math.random()*100000); 
-chrome.identity.getProfileUserInfo(function(temp){
-    console.log(temp);
-});
 
-
-var data = {
-  query: {},
-  results: [],
-  clickedResults: []
-};
-
-/*chrome.runtime.onInstalled.addListener(function() {
-    chrome.storage.sync.set({color: '#3aa757'}, function() {
-      console.log("The color is green.");
-    });
-    chrome.storage.sync.set({Query: []}, function() {
-      console.log("Query Set");
-    });
-    /*chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-        chrome.declarativeContent.onPageChanged.addRules([{
-          conditions: [new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: {urlContains: 'www.google.com/'},
-          })
-          ],
-              actions: [new chrome.declarativeContent.ShowPageAction()]
-        }]);
-      });
-  });*/
-
+/**
+ * This is the message listener that will handle the messages sent from one of the 
+ * many content scripts. The infomation from the messages will be the user data that
+ * will be logged to the cloud. 
+ */
 
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     var date = new Date();
@@ -42,28 +26,15 @@ var data = {
       request.userId = userId;
       console.log(request);
     }
-    /*else if (request.type == "searchQuery"){
-      var obj = {};
-      obj[request.currentPage.toString()] =  request.searchResults;
-      console.log(typeof(data.query[request.query.toString()]));
-      if(typeof(data.query[request.query.toString()]) == "undefined"){
-        data.query[request.query.toString()] = []
-        data.query[request.query.toString()].push(obj);
-        console.log(data.query[request.query.toString()]);
-      }
-      else{
-        if(data.query[request.query.toString()].indexOf(obj) !== -1) {
-          data.query[request.query.toString()].push(obj);
-          console.log(data);
-        }
-      }
-
-      
-    }*/
-      
-
+    
     sendResponse();
 });
+
+/**
+ * This section deals with an odd design choice that would require 
+ * a lot of time and research to adapt the extension to work around 
+ * said design choice.
+ */
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   var str = changeInfo.url;

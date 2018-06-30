@@ -1,12 +1,23 @@
-const allLinks = document.links;
-let queries = document.getElementsByClassName('r');
-let tab_index = document.getElementsByClassName('hdtb-msel')[0].innerText;
-let search = document.getElementsByClassName('gsfi');
+
+/**
+ * @author Kyler Butler
+ * 
+ * These are the main global HTML elements that contain the user information we need 
+ * prior to be cleaned and processed further. 
+ */
+
+const allLinks = document.links; // contains all the links of the documents in the proper order 
+// will be used to help maintain the original order of the results. 
+let queries = document.getElementsByClassName('r');// contains all the main web page results
+let tab_index = document.getElementsByClassName('hdtb-msel')[0].innerText; // Contains the current media navigation tab
+let search = document.getElementsByClassName('gsfi'); 
 //let form = document.getElementById('tsf');
-let searchForm = document.getElementsByName("q");
-let vids = document.getElementsByClassName('P94G9b');
-let top_stories = document.getElementsByClassName("VoEfsd");
-let cur;
+let searchForm = document.getElementsByName("q"); // Contains the search query
+let vids = document.getElementsByClassName('P94G9b'); // The video results in the main results page
+let top_stories = document.getElementsByClassName("VoEfsd"); // The top stories results in the main results page
+let cur; // The current page of the results.
+
+
 // Error handling incase the current page element is null
 try{
     cur = parseInt(document.querySelector('td.cur').textContent);
@@ -24,7 +35,7 @@ try{
     mediaBlockLinks = [];
     mediaBlock = document.getElementById('rhs_block').getElementsByTagName('a');
     for(let i = 0; i < mediaBlock.length; i++){
-        mediaBlock[i].onclick = foo;
+        mediaBlock[i].onclick = clickedLink;
         mediaBlockLinks.push(mediaBlock[i].href);
     }
     console.log(mediaBlockLinks);
@@ -40,7 +51,7 @@ try{
     extraRes = document.getElementById('extrares').getElementsByTagName('a');
     for(let i = 0; i < extraRes.length; i++){
         extraResLinks.push(extraRes[i].href);
-        extraRes[i].onclick = foo;
+        extraRes[i].onclick = clickedLink;
     }
     console.log(extraResLinks);
 }catch{}
@@ -53,7 +64,7 @@ for (var i = 0; i < queries.length; i++) {
     let res = queries[i].getElementsByTagName('a')[0]
     //console.log(queries[i].getElementsByTagName('a')[0].href); //second console output
     if(res != undefined){
-            res.onclick = foo;
+            res.onclick = clickedLink;
             results.push(res.href);
         
     }
@@ -63,6 +74,7 @@ for (var i = 0; i < queries.length; i++) {
  */
 for(let i = 0; i < vids.length; i++){
     results.push(vids[i].getElementsByTagName('a')[0].href);
+    vids[i].getElementsByTagName('a')[0].onclick = clickedLink;
     //vids[i].getElementsByTagName('a')[0].onclick = yell;
 }
 /**
@@ -72,32 +84,34 @@ for(let i = 0; i < top_stories.length; i++){
     let item = top_stories[i].getElementsByTagName('a')[0];
     if(results.indexOf(item.href) == -1){
             results.push(item.href);
+            item.onclick = clickedLink;
             //item.onclick = yell;
 
     }
 }
+/**
+ * This is the message sent from the content script, which is ran on the search engine
+ * web page, to the background script and will later be sent to the cloud.
+ */
 chrome.runtime.sendMessage({type: "searchQuery", 
 query: searchForm[0].value,
 tab: tab_index,
 engine: 'Google',
 timestamp: 0,
 searchResults: results,
+mediaBlockResults: mediaBlockLinks,
+extraResults : extraResLinks,
 currentPage: cur,
 userId : ""
 });
 
-
-//form.onSubmit = SearchesSomething;
-//console.dir(searchForm);
-//.innerText will get the hyperlink out
-function SearchesSomething(event){
-    console.log(event);
-    alert(hello);
-}
-
 console.log(results);
-
-function foo (element){
+/**
+ * This function is executed when a user clicks a link on the search engine results page.
+ * It sends a message to the background script with the URL, search query, timestamp, engine,
+ * current page, media navigation tab, and user id.
+ */
+function clickedLink (){
     //alert(this.href);
     var ref = this.href;
     chrome.runtime.sendMessage({type: "ClickedLink", 
@@ -110,11 +124,6 @@ function foo (element){
     userId : ""
     });
 };
-
-function yell(){
-    var ref = this.href;
-    alert(ref);
-}
 
 
 //code to send message to open notification. This will eventually move into my extension logic
