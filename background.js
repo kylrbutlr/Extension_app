@@ -71,7 +71,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if(str.startsWith("https://www.bing.com/")){
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {greeting: "Refresh_Bing"}, function(response) {
-          console.log('Good');
         });
       });
     }

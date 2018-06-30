@@ -1,47 +1,54 @@
+const allLinks = document.links;
 let queries = document.getElementsByClassName('r');
 let tab_index = document.getElementsByClassName('hdtb-msel')[0].innerText;
 let search = document.getElementsByClassName('gsfi');
-let form = document.getElementById('tsf');
+//let form = document.getElementById('tsf');
 let searchForm = document.getElementsByName("q");
-
-
-chrome.runtime.sendMessage({type: "searchQuery", 
-query: searchForm[0].value,
-tab: tab_index,
-engine: 'Google',
-timestamp: 0,
-userId : ""
-});
-
-
-let results = [];
-let vid_results = [];
-let news_results = [];
 let vids = document.getElementsByClassName('P94G9b');
 let top_stories = document.getElementsByClassName("VoEfsd");
-let cur = parseInt(document.querySelector('td.cur').textContent);
+let cur;
+// Error handling incase the current page element is null
+try{
+    cur = parseInt(document.querySelector('td.cur').textContent);
 
-for(let i = 0; i < vids.length; i++){
-    vid_results.push(vids[i].getElementsByTagName('a')[0].href);
-    vids[i].getElementsByTagName('a')[0].onclick = yell;
-}
-for(let i = 0; i < top_stories.length; i++){
-    let item = top_stories[i].getElementsByTagName('a')[0];
-    if(vid_results.indexOf(item.href) == -1){
-            news_results.push(item.href);
-            item.onclick = yell;
-
+}catch{}
+/**
+ * This section deals with the media block on the right side of a search results page that
+ * contains a multitude of links and information. This can be useful because a user may gain the appropriate 
+ * information from this media block without clicking a link.
+ */
+let mediaBlock =[];
+let mediaBlockLinks;
+//Try block is used to ensure that the rhs block is non null
+try{
+    mediaBlockLinks = [];
+    mediaBlock = document.getElementById('rhs_block').getElementsByTagName('a');
+    for(let i = 0; i < mediaBlock.length; i++){
+        mediaBlock[i].onclick = foo;
+        mediaBlockLinks.push(mediaBlock[i].href);
     }
-}
-console.log(news_results);
+    console.log(mediaBlockLinks);
+}catch{}
+/**
+ * This section deals with some of the related search topics and suggestions that are displayed at the 
+ * bottom of the search results page.
+ */
+let extraResLinks;
+let extraRes = [];
+try{
+    extraResLinks = [];
+    extraRes = document.getElementById('extrares').getElementsByTagName('a');
+    for(let i = 0; i < extraRes.length; i++){
+        extraResLinks.push(extraRes[i].href);
+        extraRes[i].onclick = foo;
+    }
+    console.log(extraResLinks);
+}catch{}
 
-//form.onSubmit = SearchesSomething;
-//console.dir(searchForm);
-//.innerText will get the hyperlink out
-function SearchesSomething(event){
-    console.log(event);
-    alert(hello);
-}
+let results = [];
+/**
+ * Adds the web page results to the main results array
+ */
 for (var i = 0; i < queries.length; i++) {
     let res = queries[i].getElementsByTagName('a')[0]
     //console.log(queries[i].getElementsByTagName('a')[0].href); //second console output
@@ -51,6 +58,43 @@ for (var i = 0; i < queries.length; i++) {
         
     }
 }
+/**
+ * Adds the videos results to the main results array
+ */
+for(let i = 0; i < vids.length; i++){
+    results.push(vids[i].getElementsByTagName('a')[0].href);
+    //vids[i].getElementsByTagName('a')[0].onclick = yell;
+}
+/**
+ * Adds the news results to the main results array
+ */
+for(let i = 0; i < top_stories.length; i++){
+    let item = top_stories[i].getElementsByTagName('a')[0];
+    if(results.indexOf(item.href) == -1){
+            results.push(item.href);
+            //item.onclick = yell;
+
+    }
+}
+chrome.runtime.sendMessage({type: "searchQuery", 
+query: searchForm[0].value,
+tab: tab_index,
+engine: 'Google',
+timestamp: 0,
+searchResults: results,
+currentPage: cur,
+userId : ""
+});
+
+
+//form.onSubmit = SearchesSomething;
+//console.dir(searchForm);
+//.innerText will get the hyperlink out
+function SearchesSomething(event){
+    console.log(event);
+    alert(hello);
+}
+
 console.log(results);
 
 function foo (element){
@@ -59,7 +103,6 @@ function foo (element){
     chrome.runtime.sendMessage({type: "ClickedLink", 
     href: ref,
     query: searchForm[0].value,
-    searchResults: results,
     timestamp: 0,
     engine: 'Google',
     currentPage: cur,

@@ -14,11 +14,19 @@ function onStart(){
     // query for Bing document.getElementById('sb_form_q').value;
 
     //.innerText will get the hyperlink out
+    let newsResults = [];
+    let news = document.getElementById('na_cnt').getElementsByTagName('a');
 
-    function SearchesSomething(event){
-        console.log(event);
-        alert(hello);
-    }
+
+   for(let i = 0; i < news.length; i++){
+    news[i].onclick = foo;
+    //if(newsResults.indexOf(news[i].href) == -1){
+        newsResults.push(news[i].href);
+    //}
+        
+   }
+   console.log(newsResults);
+
     for (var i = 0; i < queries.length; i++) {
         let res = queries[i].getElementsByTagName('a')
         //console.log(queries[i].getElementsByTagName('a')[0].href); //second console output

@@ -2,6 +2,8 @@ console.log('It\'s working')
 function onStart(){
     let queries = document.getElementsByClassName('result');
     let search = document.getElementsByClassName('gsfi');
+    let multimedia = document.querySelectorAll('.result-op.c-container');
+   
     // Because Baidu can't make up it's mind about which 
     // format they want to use for The Input form
     let query;
@@ -24,7 +26,17 @@ function onStart(){
     }catch{
         cur = -1
     }
+   
+    let mediaResults = [];
+    console.log(multimedia);
 
+    for(let i = 0; i < multimedia.length; i++){
+        let mediaLinks = multimedia[i].getElementsByTagName('a');
+        mediaResults.push(mediaLinks[0].href);
+        mediaLinks[0].onclick = foo;
+    }
+
+    console.log(mediaResults);
         
     let results = [];
 
