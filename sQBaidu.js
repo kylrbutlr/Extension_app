@@ -1,5 +1,10 @@
 console.log('It\'s working')
 function onStart(){
+    let lin = document.getElementsByTagName('a');
+    for(let i = 0; i < lin.length; i++){
+        lin[i].onclick = clickedLink;
+    }
+
     let queries = document.getElementsByClassName('result');
     let search = document.getElementsByClassName('gsfi');
     let multimedia = document.querySelectorAll('.result-op.c-container');
@@ -33,7 +38,7 @@ function onStart(){
     for(let i = 0; i < multimedia.length; i++){
         let mediaLinks = multimedia[i].getElementsByTagName('a');
         mediaResults.push(mediaLinks[0].href);
-        mediaLinks[0].onclick = foo;
+        mediaLinks[0].onclick = clickedLink;
     }
 
     console.log(mediaResults);
@@ -55,7 +60,7 @@ function onStart(){
 
     for (var i = 0; i < queries.length; i++) {
         //console.log(queries[i].getElementsByTagName('a')[0].href); //second console output
-        queries[i].getElementsByTagName('a')[0].onclick = foo;
+        queries[i].getElementsByTagName('a')[0].onclick = clickedLink;
         results.push(queries[i].getElementsByTagName('a')[0].href);
     }
     
@@ -89,7 +94,7 @@ function onStart(){
         userId : ""
         }
     */
-    function foo (element){
+    function clickedLink (element){
         //alert(this.href);
         var ref = this.href;
         chrome.runtime.sendMessage(

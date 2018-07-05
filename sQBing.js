@@ -1,37 +1,46 @@
 function onStart(){
+    let lin = document.getElementsByTagName('a');
+for(let i = 0; i < lin.length; i++){
+    lin[i].onclick = clickedLink;
+}
     let queries = document.getElementsByClassName('b_algo');
     let search = document.getElementsByClassName('gsfi');
-    //let form = document.getElementById('tsf');
-    //let searchForm = document.getElementsByClassName("cdr_frm");
+   
     let cur;
-    if(document.querySelector('a.sb_pagS.sb_pagS_bp.sb_bp'))
+    try{
         cur = parseInt(document.querySelector('a.sb_pagS.sb_pagS_bp.sb_bp').textContent);
-    else
-        cur = -1
+    }catch{}
     let results = [];
-    let tab_index = document.getElementsByClassName('b_active')[0].innerText;
+    let tab_index;
+    try{ 
+        tab_index = document.getElementsByClassName('b_active')[0].innerText;
+    }catch{}
     console.log(document.getElementById('sb_form_q').value);
     // query for Bing document.getElementById('sb_form_q').value;
 
     //.innerText will get the hyperlink out
     let newsResults = [];
-    let news = document.getElementById('na_cnt').getElementsByTagName('a');
+    let news;
+    try{
+        news = document.getElementById('na_cnt').getElementsByTagName('a');
+        for(let i = 0; i < news.length; i++){
+            news[i].onclick = clickedLink;
+            //if(newsResults.indexOf(news[i].href) == -1){
+                newsResults.push(news[i].href);
+            //}
+           }
+    }catch{}
+   
 
 
-   for(let i = 0; i < news.length; i++){
-    news[i].onclick = foo;
-    //if(newsResults.indexOf(news[i].href) == -1){
-        newsResults.push(news[i].href);
-    //}
-        
-   }
+   
    console.log(newsResults);
 
     for (var i = 0; i < queries.length; i++) {
         let res = queries[i].getElementsByTagName('a')
         //console.log(queries[i].getElementsByTagName('a')[0].href); //second console output
         for(let j = 0; j < res.length; j++){
-            res[j].onclick = foo;
+            res[j].onclick = clickedLink;
             results.push(res[j].href);
         }    
     }
@@ -40,16 +49,17 @@ function onStart(){
     chrome.runtime.sendMessage({type: "searchQuery", 
     query: document.getElementById('sb_form_q').value,
     timestamp: 0,
+    searchResults: results,
+    currentPage: cur,
     engine: 'Bing',
     tab: tab_index});
 
-    function foo (element){
+    function clickedLink (element){
         //alert(this.href);
         var ref = this.href;
         chrome.runtime.sendMessage({type: "ClickedLink", 
         href: ref,
         query: document.getElementById('sb_form_q').value,
-        searchResults: results,
         engine: 'Bing',
         timestamp: 0,
         currentPage: cur,
