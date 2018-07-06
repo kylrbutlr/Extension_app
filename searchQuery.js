@@ -17,7 +17,20 @@ for(let i = 0; i < lin.length; i++){
     lin[i].onclick = clickedLink;
 }
 
-const allLinks = document.getElementById('res').getElementsByTagName('a'); // contains all the links of the documents in the proper order 
+let finalResults = [];
+let finalLinks = document.querySelectorAll(".g, .rSr7Wd, .BFJZOc, .klbar, #brs");
+//NOTE: Get Rank Count to aid mutiple page queries.
+for(let i=0; i < finalLinks.length; i++){
+    let tempRes = finalLinks[i].getElementsByTagName('a');
+    for(let j = 0; j < tempRes.length; j++){
+        tempRes[j].Rank = i+1;
+        finalResults.push(tempRes[j].href);
+    }
+}
+//console.log(tempResults);
+
+
+//const allLinks = document.getElementById('res').getElementsByTagName('a'); // contains all the links of the documents in the proper order 
 // will be used to help maintain the original order of the results. 
 let queries = document.getElementsByClassName('g');// contains all the main web page results
 let tab_index = document.getElementsByClassName('hdtb-msel')[0].innerText; // Contains the current media navigation tab
@@ -48,8 +61,9 @@ try{
     for(let i = 0; i < mediaBlock.length; i++){
        // mediaBlock[i].onclick = clickedLink;
         mediaBlockLinks.push(mediaBlock[i].href);
+        mediaBlock[i].queryLogType = "Multimedia Block"
     }
-    console.log(mediaBlockLinks);
+    //console.log(mediaBlockLinks);
 }catch{}
 /**
  * This section deals with some of the related search topics and suggestions that are displayed at the 
@@ -65,7 +79,7 @@ try{
         extraRes.queryLogType = 'Extra Results';
        // extraRes[i].onclick = clickedLink;
     }
-    console.log(extraResLinks);
+    //console.log(extraResLinks);
 }catch{}
 
 let imgResults;
@@ -77,7 +91,7 @@ try{
         //imgResults[i].onclick = clickedLink;
         imgResultsLinks.push(imgResults[i].href);
     }
-    console.log(imgResultsLinks);
+    //console.log(imgResultsLinks);
 }catch{}
 
 let tileResults;
@@ -89,7 +103,7 @@ try{
         //tileResults[i].onclick = clickedLink;
         tileResultsLinks.push(tileResults[i].href);
     }
-    console.log(tileResultsLinks);
+   // console.log(tileResultsLinks);
 }catch{}
 /**
  * Adds the web page results to the main results array
@@ -101,7 +115,7 @@ for (var i = 0; i < queries.length; i++) {
            for(let j = 0; j < res.length; j++){
             results.push(res[j].href); 
             res[j].queryLogType = 'Main';
-            res[j].Rank = i+1;
+            //res[j].Rank = i+1;
            }
     }
 }
@@ -125,22 +139,6 @@ for(let i = 0; i < top_stories.length; i++){
             //item.onclick = clickedLink;
 }
 
-let finalRes = [];
-let rankCount = 1;
-for(let i = 0; i < allLinks.length; i++){
-    let index = results.indexOf(allLinks[i].href);
-    if( index != -1){
-        finalRes.push(allLinks[i].href);
-        //allLinks[i].Rank = rankCount;
-        //rankCount++;
-       // allLinks[i].onclick = clickedLink;
-        //console.log('This part works')
-        //delete results[index];
-        }
-    
-}
-
-console.log(finalRes);
 /**
  * This is the message sent from the content script, which is ran on the search engine
  * web page, to the background script and will later be sent to the cloud.
@@ -153,6 +151,7 @@ timestamp: 0,
 searchResults: results,
 mediaBlockResults: mediaBlockLinks,
 extraResults : extraResLinks,
+orderedResults: finalResults,
 currentPage: cur,
 userId : ""
 });

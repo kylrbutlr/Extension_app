@@ -18,6 +18,19 @@ function onStart(){
     for(let i = 0; i < lin.length; i++){
         lin[i].onclick = clickedLink;
     }
+
+    let finalResults = [];
+    let finalLinks = document.querySelectorAll(".b_ans, .b_algo, .b_ad, #b_context");
+    //NOTE: Get Rank Count to aid mutiple page queries.
+    for(let i=0; i < finalLinks.length; i++){
+        let tempRes = finalLinks[i].getElementsByTagName('a');
+        for(let j = 0; j < tempRes.length; j++){
+            tempRes[j].Rank = i+1;
+            finalResults.push(tempRes[j].href);
+        }
+    }
+console.log(finalResults);
+
     let queries = document.getElementsByClassName('b_algo');
     /**
      * Try and catch for current page identifier. 
@@ -86,6 +99,7 @@ function onStart(){
         query: document.getElementById('sb_form_q').value,
         engine: 'Bing',
         timestamp: 0,
+        rank: this.Rank,
         currentPage: cur,
         tab: tab_index,
         userId : ""

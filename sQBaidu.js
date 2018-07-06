@@ -4,7 +4,28 @@ function onStart(){
     for(let i = 0; i < lin.length; i++){
         lin[i].onclick = clickedLink;
     }
-
+    let finalResults = [];
+    let finalLinks = document.querySelectorAll(".c-container, #rs");
+    let rankCount = finalLinks.length;
+    //NOTE: Get Rank Count to aid mutiple page queries.
+    for(let i=0; i < rankCount; i++){
+        let tempRes = finalLinks[i].getElementsByTagName('a');
+        for(let j = 0; j < tempRes.length; j++){
+            tempRes[j].Rank = i+1;
+            finalResults.push(tempRes[j].href);
+        }
+    }
+    //Adding Baidu MediaBlock to end for consistency
+    let mediaBlock = document.querySelectorAll("#content_right");
+    for(let i = 0; i < mediaBlock.length; i++){
+        let tempRes = mediaBlock[i].getElementsByTagName('a');
+        rankCount++;
+        for(let j = 0; j < tempRes.length; j++){
+            tempRes[j].Rank = rankCount;
+            finalResults.push(tempRes[j].href);
+        }
+    }
+    console.log(finalResults);
     let queries = document.getElementsByClassName('result');
     let search = document.getElementsByClassName('gsfi');
     let multimedia = document.querySelectorAll('.result-op.c-container');
@@ -68,6 +89,7 @@ function onStart(){
     chrome.runtime.sendMessage({type: "searchQuery", 
     query: query,
     tab: tab_index,
+    searchResults: results,
     engine: 'Baidu',
     timestamp: 0,
     userId : ""
@@ -101,9 +123,9 @@ function onStart(){
             {type: "ClickedLink", 
             href: ref,
             query: query,
-            searchResults: results,
             engine: 'Baidu',
             timestamp: 0,
+            rank: this.Rank,
             currentPage: cur,
             tab: tab_index,
             userId : ""
