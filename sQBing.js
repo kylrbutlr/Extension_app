@@ -1,11 +1,30 @@
+/**
+ * @author Kyler Butler
+ * This is the content script that will run on the bing search engine.
+ * 
+ */
+
+ /**
+  * @function onStart
+  * The function, onStart(), is a function that will execute
+ * everytime the webpage on the bing is refreshed or the url 
+ * changes. This is to ensure that when a user changes their 
+ * query the content script will capture and log said event.
+ * This structure is similar to how Baidu's content script functions
+ * since Bing and Baidu are similar in the design.
+  */
 function onStart(){
     let lin = document.getElementsByTagName('a');
-for(let i = 0; i < lin.length; i++){
-    lin[i].onclick = clickedLink;
-}
+    for(let i = 0; i < lin.length; i++){
+        lin[i].onclick = clickedLink;
+    }
     let queries = document.getElementsByClassName('b_algo');
-    let search = document.getElementsByClassName('gsfi');
-   
+    /**
+     * Try and catch for current page identifier. 
+     * If the Try trails, cur will be undefined, hence,
+     * will not appear in the object sent to the background script.
+     * 
+     */
     let cur;
     try{
         cur = parseInt(document.querySelector('a.sb_pagS.sb_pagS_bp.sb_bp').textContent);
@@ -16,9 +35,7 @@ for(let i = 0; i < lin.length; i++){
         tab_index = document.getElementsByClassName('b_active')[0].innerText;
     }catch{}
     console.log(document.getElementById('sb_form_q').value);
-    // query for Bing document.getElementById('sb_form_q').value;
-
-    //.innerText will get the hyperlink out
+    
     let newsResults = [];
     let news;
     try{
@@ -30,8 +47,15 @@ for(let i = 0; i < lin.length; i++){
             //}
            }
     }catch{}
-   
-
+    let videoResults=[];
+   let videos;
+   try{
+       videos = document.getElementsByClassName('vt11b');
+       for(let i = 0; i < videos.length; i++){
+        videoResults.push(videos[i].href);
+       }
+   }catch{}
+   console.log(videoResults);  
 
    
    console.log(newsResults);
@@ -68,7 +92,8 @@ for(let i = 0; i < lin.length; i++){
         });
     };
 }
-onStart();
+onStart(); //To start the script for the first page load.
+
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
       console.log(sender.tab ?
@@ -78,9 +103,3 @@ chrome.runtime.onMessage.addListener(
         onStart();
       }
     });
-
-  
-
-//XMLHttpRequest.onreadystatechange = function () { alert('please');};
-//document.onreadystatechange = function () { alert('please');};
-//code to send message to open notification. This will eventually move into my extension logic

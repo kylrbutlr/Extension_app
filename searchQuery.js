@@ -17,9 +17,9 @@ for(let i = 0; i < lin.length; i++){
     lin[i].onclick = clickedLink;
 }
 
-const allLinks = document.links; // contains all the links of the documents in the proper order 
+const allLinks = document.getElementById('res').getElementsByTagName('a'); // contains all the links of the documents in the proper order 
 // will be used to help maintain the original order of the results. 
-let queries = document.getElementsByClassName('r');// contains all the main web page results
+let queries = document.getElementsByClassName('g');// contains all the main web page results
 let tab_index = document.getElementsByClassName('hdtb-msel')[0].innerText; // Contains the current media navigation tab
 let search = document.getElementsByClassName('gsfi'); 
 //let form = document.getElementById('tsf');
@@ -62,6 +62,7 @@ try{
     extraRes = document.getElementById('extrares').getElementsByTagName('a');
     for(let i = 0; i < extraRes.length; i++){
         extraResLinks.push(extraRes[i].href);
+        extraRes.queryLogType = 'Extra Results';
        // extraRes[i].onclick = clickedLink;
     }
     console.log(extraResLinks);
@@ -79,7 +80,7 @@ try{
     console.log(imgResultsLinks);
 }catch{}
 
-let tileResults
+let tileResults;
 let tileResultsLinks;
 try{
     tileResultsLinks = [];
@@ -96,16 +97,13 @@ try{
 let results = [];
 for (var i = 0; i < queries.length; i++) {
     let res = queries[i].getElementsByTagName('a')
-    //console.log(queries[i].getElementsByTagName('a')[0].href); //second console output
     if(res != undefined){
-            //res[0].onclick = clickedLink;
-            results.push(res[0].href); 
-            res[0].queryLogType = 'Main';
-           /* for(let j = 0; j < res.length; j++){
-                res[j].onclick = clickedLink;
-            }*/
+           for(let j = 0; j < res.length; j++){
+            results.push(res[j].href); 
+            res[j].queryLogType = 'Main';
+            res[j].Rank = i+1;
+           }
     }
-
 }
 /**
  * Adds the videos results to the main results array
@@ -123,16 +121,21 @@ for (var i = 0; i < queries.length; i++) {
 for(let i = 0; i < top_stories.length; i++){
     let item = top_stories[i].getElementsByTagName('a')[0];
             results.push(item.href);
+            item.queryLogType = 'News/Videos';
             //item.onclick = clickedLink;
 }
 
 let finalRes = [];
+let rankCount = 1;
 for(let i = 0; i < allLinks.length; i++){
     let index = results.indexOf(allLinks[i].href);
     if( index != -1){
         finalRes.push(allLinks[i].href);
+        //allLinks[i].Rank = rankCount;
+        //rankCount++;
        // allLinks[i].onclick = clickedLink;
         //console.log('This part works')
+        //delete results[index];
         }
     
 }
@@ -168,6 +171,7 @@ function clickedLink (){
     query: searchForm[0].value,
     timestamp: 0,
     engine: 'Google',
+    rank: this.Rank,
     currentPage: cur,
     linkType: this.queryLogType,
     tab: tab_index,
