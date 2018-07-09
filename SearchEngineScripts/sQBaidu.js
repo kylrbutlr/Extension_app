@@ -15,7 +15,7 @@ function onStart(){
             finalResults.push(tempRes[j].href);
         }
     }
-    //Adding Baidu MediaBlock to end for consistency
+    //Adding Baidu MediaBlock to end for consistency of other search engine
     let mediaBlock = document.querySelectorAll("#content_right");
     for(let i = 0; i < mediaBlock.length; i++){
         let tempRes = mediaBlock[i].getElementsByTagName('a');

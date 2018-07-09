@@ -10,19 +10,19 @@
     "content_scripts": [
       {
         "matches": ["https://www.google.com/*"],
-        "js": ["searchQuery.js"]
+        "js": ["SearchEngineScripts/searchQuery.js"]
       },
       {
         "matches": ["https://www.bing.com/*"],
-        "js": ["sQBing.js"]
+        "js": ["SearchEngineScripts/sQBing.js"]
       },
       {
         "matches": ["https://search.yahoo.com/*"],
-        "js": ["sQYahoo.js"]
+        "js": ["SearchEngineScripts/sQYahoo.js"]
       },
       {
         "matches": ["*://*.baidu.com/*"],
-        "js": ["sQBaidu.js"]
+        "js": ["SearchEngineScripts/sQBaidu.js"]
       }
     ],
     "browser_action": {
@@ -34,7 +34,7 @@
         "128": "images/get_started128.png"
       }
     },
-    "options_page": "options.html",
+    "options_page": "Misc/options.html",
     "icons": {
       "16": "images/get_started16.png",
       "32": "images/get_started32.png",
