@@ -30,7 +30,15 @@ The Data structure (seen below) that is sent from the content script to the back
 {
     type: "searchQuery", //Type of the event of the message sent
     query: "", // query entered by the user
+    tab: tab_index, //Identifies the media tab index (i.e. Images, video, news, all)
+    engine: 'Google', // Identifies the search engine of origin
+    rank: <int>, // indicates the classified rank of the link
     timestamp: <int>, // The page of the results from the search engine
+    searchResults: [], // search results from the search engine
+    mediaBlockResults: [], //Not finalized
+    extraResults : [], //Not finalized
+    orderedResults: [], //Not finalized
+    currentPage: <int>, // The page of the results from the search engine
     userId : "" // Unique Id of the user
 }
 ```
@@ -58,6 +66,13 @@ When the user clicks a link on the search engine results page this object is sen
 
 ### Data mining and Cloud Computing Specifications:
 
+Normalized Discounted Cumulative Gain is the metric we'll be using to evaluate each query per search engine.
+![DCG](https://wikimedia.org/api/rest_v1/media/math/render/svg/3efe45491d555db398ed663107460f81d6ecaf1e)
+
+![IDCG](https://wikimedia.org/api/rest_v1/media/math/render/svg/0dfdd91ad2b2e59fce87ed6d6e5fa8ddd2678a7b)
+
+![nDCG](https://wikimedia.org/api/rest_v1/media/math/render/svg/b3510c9c5cf42ee8820d65335675cada51b40736)
+
 (not finalized yet)
 
 ## References:
@@ -76,3 +91,8 @@ When the user clicks a link on the search engine results page this object is sen
 
 [Evaluating the retrieval effectiveness of Web search engines using a representative query sample](https://pdfs.semanticscholar.org/0d2e/113b190000807799d4cd623231aca816809b.pdf)
 
+[Counterfactual Learning-to-Rank for Additive Metrics and Deep Models](https://arxiv.org/pdf/1805.00065.pdf)
+
+[Models for IR Evaluation](https://people.cs.umass.edu/~jpjiang/cs646/13_eval2.pdf)
+
+[Discounted cumulative gain](https://en.wikipedia.org/wiki/Discounted_cumulative_gain)
