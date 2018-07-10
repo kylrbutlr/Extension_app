@@ -1,11 +1,26 @@
-console.log('It\'s working')
+/**
+ * @author Kyler Butler
+ * This is the content script that will run on the Baidu search engine.
+ * 
+ */
+
+ /**
+  * @function onStart
+  * The function, onStart(), is a function that will execute
+ * everytime the webpage on the Baidu is refreshed or the url 
+ * changes. This is to ensure that when a user changes their 
+ * query the content script will capture and log said event.
+ * This structure is similar to how Baidu's content script functions
+ * since Baidu and Bing are similar in the design.
+  */
 function onStart(){
-    let lin = document.getElementsByTagName('a');
+    let lin = document.getElementsByTagName('a'); //This contains all the links in the webpage.
+     //This sets the onclick event to the clickedLink function of all links of the webpage.
     for(let i = 0; i < lin.length; i++){
         lin[i].onclick = clickedLink;
     }
-    let finalResults = [];
-    let finalLinks = document.querySelectorAll(".c-container, #rs");
+    let finalResults = []; //Array that contains all the links of the search results in order
+    let finalLinks = document.querySelectorAll(".c-container, #rs"); 
     let rankCount = finalLinks.length;
     //NOTE: Get Rank Count to aid mutiple page queries.
     for(let i=0; i < rankCount; i++){
@@ -26,9 +41,13 @@ function onStart(){
         }
     }
     console.log(finalResults);
-    let queries = document.getElementsByClassName('result');
-    let search = document.getElementsByClassName('gsfi');
-    let multimedia = document.querySelectorAll('.result-op.c-container');
+    /**
+     * This section may be refactored and changed since many 
+     * of these elements are already covered by previous code.
+     */
+    let queries = document.getElementsByClassName('result'); 
+    //let search = document.getElementsByClassName('gsfi');
+    let multimedia = document.querySelectorAll('.result-op.c-container'); 
    
     // Because Baidu can't make up it's mind about which 
     // format they want to use for The Input form
@@ -41,30 +60,15 @@ function onStart(){
         query = document.getElementById('new-bdvSearchInput').value;
     }
     catch{}
-    //let form = document.getElementById('tsf');
-    //let searchForm = document.getElementsByClassName("cdr_frm");
     
     // Because Baidu can't make up it's mind about which 
     // format they want to use for The Current page number
     let cur;
     try{
         cur = parseInt(document.getElementById('page').querySelector('strong').innerText);
-    }catch{
-        cur = -1
-    }
-   
-    let mediaResults = [];
-    console.log(multimedia);
-
-    for(let i = 0; i < multimedia.length; i++){
-        let mediaLinks = multimedia[i].getElementsByTagName('a');
-        mediaResults.push(mediaLinks[0].href);
-        mediaLinks[0].onclick = clickedLink;
-    }
-
-    console.log(mediaResults);
+    }catch{}
         
-    let results = [];
+    let results = []; //Array that contains all the search results.
 
     // Because Baidu can't make up it's mind about which 
     // format they want to use for The Media Nav bar
@@ -85,6 +89,11 @@ function onStart(){
         results.push(queries[i].getElementsByTagName('a')[0].href);
     }
     
+   /**
+    * This is to help with the weird formatting issues that Baidu 
+    * seems to love. If the query field is undefined then the message 
+    * won't be sent to the background script otherwise it will.
+    */ 
    if(query){
     chrome.runtime.sendMessage({type: "searchQuery", 
     query: query,
@@ -95,27 +104,9 @@ function onStart(){
     userId : ""
     });
    }
-/*{type: "searchQuery", 
-    query: document.getElementsByName('wd')[0].value,
-    tab: tab_index,
-    engine: 'Baidu',
-    timestamp: 0,
-    userId : ""
-    }*/ 
+
     console.log(results);
 
-    /*
-    {type: "ClickedLink", 
-        href: ref,
-        query: document.getElementsByName('wd')[0].value,
-        searchResults: results,
-        engine: 'Baidu',
-        timestamp: 0,
-        currentPage: cur,
-        tab: tab_index,
-        userId : ""
-        }
-    */
     function clickedLink (element){
         //alert(this.href);
         var ref = this.href;
@@ -132,8 +123,6 @@ function onStart(){
         });
 
     };
-
-
     //code to send message to open notification. This will eventually move into my extension logic
 
 }

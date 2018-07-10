@@ -38,19 +38,34 @@ console.log(finalResults);
      * will not appear in the object sent to the background script.
      * 
      */
-    let cur;
+    let cur; // The current page of search results
+    /**
+     * This is a try catch that atomically checks if the element exists 
+     * and if not it will remain undefined. 
+     */
     try{
         cur = parseInt(document.querySelector('a.sb_pagS.sb_pagS_bp.sb_bp').textContent);
     }catch{}
-    let results = [];
-    let tab_index;
+
+    let results = []; // Array that stores the search results 
+
+    let tab_index;// The current Media Tab index (i.e. Images, videos, all)
+    /**
+     * This is a try catch that atomically checks if the element exists 
+     * and if not it will remain undefined. 
+     */
     try{ 
         tab_index = document.getElementsByClassName('b_active')[0].innerText;
     }catch{}
+
     console.log(document.getElementById('sb_form_q').value);
     
-    let newsResults = [];
-    let news;
+    let newsResults = []; // array that stores the news search results from the main page.
+    let news; // raw unprocessed elements of the news results
+    /**
+     * This is a try catch that atomically checks if the element exists 
+     * and if not it will remain undefined. 
+     */
     try{
         news = document.getElementById('na_cnt').getElementsByTagName('a');
         for(let i = 0; i < news.length; i++){
@@ -60,8 +75,13 @@ console.log(finalResults);
             //}
            }
     }catch{}
+
     let videoResults=[];
    let videos;
+   /**
+     * This is a try catch that atomically checks if the element exists 
+     * and if not it will remain undefined. 
+     */
    try{
        videos = document.getElementsByClassName('vt11b');
        for(let i = 0; i < videos.length; i++){
