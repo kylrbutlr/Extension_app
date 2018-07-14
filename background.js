@@ -13,22 +13,23 @@ const userId = Math.floor(Math.random()*100000);
  * will be logged to the cloud. 
  */
 
-  chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    var date = new Date();
-      var timestamp = date.getTime();
-    if (request.type == "ClickedLink"){
-      request.timestamp = timestamp;
-      request.userId = userId;
-      console.log(request);
-    }
-    else if (request.type == "searchQuery"){
-      request.timestamp = timestamp;
-      request.userId = userId;
-      console.log(request);
-    }
-    
-    sendResponse();
-});
+  chrome.runtime.onConnect.addListener(function(port){
+    console.assert(port.name == "Engine");
+    port.onMessage.addListener(function(request) {
+      var date = new Date();
+        var timestamp = date.getTime();
+      if (request.type == "ClickedLink"){
+        request.timestamp = timestamp;
+        request.userId = userId;
+        console.log(request);
+      }
+      else if (request.type == "searchQuery"){
+        request.timestamp = timestamp;
+        request.userId = userId;
+        console.log(request);
+      }
+  });
+  });
 
 /**
  * This section deals with an odd design choice that would require 
@@ -36,19 +37,36 @@ const userId = Math.floor(Math.random()*100000);
  * said design choice.
  */
 
+
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   var str = changeInfo.url;
   if(str){
     if(str.startsWith("https://www.bing.com/")){
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {greeting: "Refresh_Bing"}, function(response) {
-        });
-      });
+      //setTimeout(function(){
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          if(tabs.length > 0){
+            chrome.tabs.sendMessage(tabs[0].id, {greeting: "Refresh_Bing"}, function(response) {
+          });
+        }});
+      //}, 20);
     }
     else if(str.includes(".baidu.com/")){
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {greeting: "Refresh_Baidu"});
+      //setTimeout(function(){
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          //if(tabs.length > 0){
+            //console.log('it good');
+            chrome.tabs.sendMessage(tabs[0].id, {greeting: "Refresh_Baidu"});
+      //  }
       });
+      //}, 20);
     }
   }
 });
+
+chrome.tabs.onActivated.addListener(function(tabId, windowId) {
+       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {greeting: "Refresh_Baidu"});
+      });
+    }
+  
+);

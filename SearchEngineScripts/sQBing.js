@@ -16,18 +16,20 @@
 function onStart(){
     let lin = document.getElementsByTagName('a');
     for(let i = 0; i < lin.length; i++){
-        lin[i].onclick = clickedLink;
+        lin[i].onmousedown = clickedLink;
     }
 
     let finalResults = [];
-    let finalLinks = document.querySelectorAll(".b_ans, .b_algo, .b_ad, #b_context");
+    let finalLinks = document.querySelectorAll(".b_ans, .b_algo, .b_ad, #b_context, .carousel-content");
     //NOTE: Get Rank Count to aid mutiple page queries.
     for(let i=0; i < finalLinks.length; i++){
         let tempRes = finalLinks[i].getElementsByTagName('a');
+        let linkres = [];
         for(let j = 0; j < tempRes.length; j++){
             tempRes[j].Rank = i+1;
-            finalResults.push(tempRes[j].href);
+            linkres.push(tempRes[j].href);
         }
+        finalResults.push(linkres);
     }
 console.log(finalResults);
 
@@ -103,10 +105,11 @@ console.log(finalResults);
     }
 
     console.log(results);
-    chrome.runtime.sendMessage({type: "searchQuery", 
+    var port = chrome.runtime.connect({name: "Engine"});
+    port.postMessage({type: "searchQuery", 
     query: document.getElementById('sb_form_q').value,
     timestamp: 0,
-    searchResults: results,
+    searchResults: finalResults,
     currentPage: cur,
     engine: 'Bing',
     tab: tab_index});
@@ -114,7 +117,8 @@ console.log(finalResults);
     function clickedLink (element){
         //alert(this.href);
         var ref = this.href;
-        chrome.runtime.sendMessage({type: "ClickedLink", 
+     
+        port.postMessage({type: "ClickedLink", 
         href: ref,
         query: document.getElementById('sb_form_q').value,
         engine: 'Bing',
@@ -134,6 +138,6 @@ chrome.runtime.onMessage.addListener(
                   "from a content script:" + sender.tab.url :
                   "from the extension");
       if (request.greeting == "Refresh_Bing"){
-        onStart();
+       window.onload = onStart();
       }
     });

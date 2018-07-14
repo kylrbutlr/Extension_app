@@ -13,32 +13,39 @@
  * This structure is similar to how Baidu's content script functions
  * since Baidu and Bing are similar in the design.
   */
+
 function onStart(){
-    let lin = document.getElementsByTagName('a'); //This contains all the links in the webpage.
+    let lin = document.querySelectorAll('a'); //This contains all the links in the webpage.
      //This sets the onclick event to the clickedLink function of all links of the webpage.
     for(let i = 0; i < lin.length; i++){
-        lin[i].onclick = clickedLink;
+        lin[i].onmousedown = clickedLink;
+        //lin[i].target = "";
     }
     let finalResults = []; //Array that contains all the links of the search results in order
-    let finalLinks = document.querySelectorAll(".c-container, #rs"); 
+    let finalLinks = document.querySelectorAll(".c-container, #rs, .opt_relation_main"); 
     let rankCount = finalLinks.length;
     //NOTE: Get Rank Count to aid mutiple page queries.
     for(let i=0; i < rankCount; i++){
         let tempRes = finalLinks[i].getElementsByTagName('a');
+        let linkres = [];
         for(let j = 0; j < tempRes.length; j++){
             tempRes[j].Rank = i+1;
-            finalResults.push(tempRes[j].href);
+            linkres.push(tempRes[j].href);
         }
+        finalResults.push(linkres);
     }
     //Adding Baidu MediaBlock to end for consistency of other search engine
     let mediaBlock = document.querySelectorAll("#content_right");
+   
     for(let i = 0; i < mediaBlock.length; i++){
         let tempRes = mediaBlock[i].getElementsByTagName('a');
+        let mediaLinks = [];
         rankCount++;
         for(let j = 0; j < tempRes.length; j++){
             tempRes[j].Rank = rankCount;
-            finalResults.push(tempRes[j].href);
+            mediaLinks.push(tempRes[j].href);
         }
+        finalResults.push(mediaLinks);
     }
     console.log(finalResults);
     /**
@@ -94,11 +101,13 @@ function onStart(){
     * seems to love. If the query field is undefined then the message 
     * won't be sent to the background script otherwise it will.
     */ 
+   var port = chrome.runtime.connect({name: "Engine"});
    if(query){
-    chrome.runtime.sendMessage({type: "searchQuery", 
+    port.postMessage({type: "searchQuery", 
     query: query,
+    currentPage: cur,
     tab: tab_index,
-    searchResults: results,
+    searchResults: finalResults,
     engine: 'Baidu',
     timestamp: 0,
     userId : ""
@@ -110,7 +119,8 @@ function onStart(){
     function clickedLink (element){
         //alert(this.href);
         var ref = this.href;
-        chrome.runtime.sendMessage(
+       
+        port.postMessage(
             {type: "ClickedLink", 
             href: ref,
             query: query,
@@ -133,6 +143,9 @@ chrome.runtime.onMessage.addListener(
                   "from a content script:" + sender.tab.url :
                   "from the extension");
       if (request.greeting == "Refresh_Baidu"){
-        onStart();
+          //setTimeout(function(){
+            window.onload = onStart();
+          //}, 700);
+       
       }
     });

@@ -14,7 +14,7 @@
 
 let lin = document.getElementsByTagName('a');
 for(let i = 0; i < lin.length; i++){
-    lin[i].onclick = clickedLink;
+    lin[i].onmousedown = clickedLink;
 }
 
 let finalResults = [];
@@ -22,10 +22,12 @@ let finalLinks = document.querySelectorAll(".g, .rSr7Wd, .BFJZOc, .klbar, #brs")
 //NOTE: Get Rank Count to aid mutiple page queries.
 for(let i=0; i < finalLinks.length; i++){
     let tempRes = finalLinks[i].getElementsByTagName('a');
+    let linkres = [];
     for(let j = 0; j < tempRes.length; j++){
         tempRes[j].Rank = i+1;
-        finalResults.push(tempRes[j].href);
+        linkres.push(tempRes[j].href);
     }
+    finalResults.push(linkres);
 }
 //console.log(tempResults);
 
@@ -113,7 +115,7 @@ for (var i = 0; i < queries.length; i++) {
     let res = queries[i].getElementsByTagName('a')
     if(res != undefined){
            for(let j = 0; j < res.length; j++){
-            results.push(res[j].href); 
+            //results.push(res[j].href); 
             res[j].queryLogType = 'Main';
             //res[j].Rank = i+1;
            }
@@ -134,7 +136,7 @@ for (var i = 0; i < queries.length; i++) {
  */
 for(let i = 0; i < top_stories.length; i++){
     let item = top_stories[i].getElementsByTagName('a')[0];
-            results.push(item.href);
+            //results.push(item.href);
             item.queryLogType = 'News/Videos';
             //item.onclick = clickedLink;
 }
@@ -143,14 +145,12 @@ for(let i = 0; i < top_stories.length; i++){
  * This is the message sent from the content script, which is ran on the search engine
  * web page, to the background script and will later be sent to the cloud.
  */
-chrome.runtime.sendMessage({type: "searchQuery", 
+var port = chrome.runtime.connect({name: "Engine"});
+port.postMessage({type: "searchQuery", 
 query: searchForm[0].value,
 tab: tab_index,
 engine: 'Google',
 timestamp: 0,
-searchResults: results,
-mediaBlockResults: mediaBlockLinks,
-extraResults : extraResLinks,
 orderedResults: finalResults,
 currentPage: cur,
 userId : ""
@@ -165,7 +165,7 @@ console.log(results);
 function clickedLink (){
     //alert(this.href);
     var ref = this.href;
-    chrome.runtime.sendMessage({type: "ClickedLink", 
+    port.postMessage({type: "ClickedLink", 
     href: ref,
     query: searchForm[0].value,
     timestamp: 0,
