@@ -13,8 +13,8 @@ Which search engine is the best? This simple question is at the core of multiple
 In this project, we will use user interactions with each search engine to better understand the effectiveness of each platform. First, the methods of search engine evaluation should be researched and adapted to this project. Second, a system (i.e. a browser extension) should be used to record data from the user: pages returned, links clicked, query chains, type of query, modifications to the original query, and  time taken to find resource. Third, the data collected by the browser extension should be sent to the cloud and analyzed using data mining. 
 
 ### Browser Extension Specifications:
-> There have been attempts to create a class for less redundancy and ease of testing; however, every attempt has been
-thwarted due to the nature of content scripts and web extensions despite Google's claim. 
+> There have been attempts to create an object class for less redundancy and ease of testing; however, every attempt has been
+thwarted due to the nature of content scripts and web extensions despite Google's claim that chrome extensions support object classes. 
 
 The Data structure (seen below) that is sent from the content script to the background script when the user clicks a link is of the following form:
 ```javascript
