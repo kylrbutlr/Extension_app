@@ -19,10 +19,12 @@ The Data structure (seen below) that is sent from the content script to the back
     type: "ClickedLink", //Type of the event of the message sent
     href: "", // Url clicked by the user
     query: "", // query entered by the user
-    searchResults: [], // search results from the search engine
     engine: "", // The search engine that is used
+    rank: <int>, // identifies the rank of the link (see ranking section below)
     timeClicked: <timeStamp> // The time thw user clicked the url
     currentPage: <int>, // The page of the results from the search engine
+    linkType: "",// indicates what type of link was clicked (i.e. Image, Video, News, Webpage, etc)
+    tab: tab_index, //Identifies the media tab index (i.e. Images, video, news, all)
     userId : "" // Unique Id of the user
 }
 ```
@@ -32,13 +34,10 @@ The Data structure (seen below) that is sent from the content script to the back
     type: "searchQuery", //Type of the event of the message sent
     query: "", // query entered by the user
     tab: tab_index, //Identifies the media tab index (i.e. Images, video, news, all)
-    engine: 'Google', // Identifies the search engine of origin
-    rank: <int>, // indicates the classified rank of the link
+    engine: "", // Identifies the search engine of origin
     timestamp: <int>, // The page of the results from the search engine
-    searchResults: [], // search results from the search engine
-    mediaBlockResults: [], //Not finalized
-    extraResults : [], //Not finalized
-    orderedResults: [], //Not finalized
+    orderedResults: [[]], // 2D matrix of search results from the search engine. Each row is a rank and the all links in
+    // said row belong to the same ranking
     currentPage: <int>, // The page of the results from the search engine
     userId : "" // Unique Id of the user
 }
@@ -63,7 +62,8 @@ The Data structure (seen below) that is sent from the content script to the back
 </ul>
 
 **Ranking Specifics**
-![Rankings]()
+![Rankings](https://github.com/kylrbutlr/Extension_app/blob/master/images/pasted%20image%200.png)
+
 
 When the user clicks a link on the search engine results page this object is sent to the background script.
 (not finalized yet)
