@@ -1,7 +1,8 @@
 # Evaluating The Effectiveness Of Internet Search Engines:
 
 This is an Extension for tracking user input on search engines such as Google, Bing, and Baidu.
-The extension is only available on chrome and currently has no backend.
+The extension is only available on chrome and currently has no backend but is planned to be 
+connected to a cloud database.
 
 ## Introduction:
 
@@ -12,6 +13,8 @@ Which search engine is the best? This simple question is at the core of multiple
 In this project, we will use user interactions with each search engine to better understand the effectiveness of each platform. First, the methods of search engine evaluation should be researched and adapted to this project. Second, a system (i.e. a browser extension) should be used to record data from the user: pages returned, links clicked, query chains, type of query, modifications to the original query, and  time taken to find resource. Third, the data collected by the browser extension should be sent to the cloud and analyzed using data mining. 
 
 ### Browser Extension Specifications:
+> There have been attempts to create a class for less redundancy and ease of testing; however, every attempt has been
+thwarted due to the nature of content scripts and web extensions despite Google's claim. 
 
 The Data structure (seen below) that is sent from the content script to the background script when the user clicks a link is of the following form:
 ```javascript
@@ -45,7 +48,7 @@ The Data structure (seen below) that is sent from the content script to the back
 **Tracked Information:**
 <ul>
     <li>
-        <p>When the results page loads the query is recorded since the user may read the results and then have to chnage their query to better fit their needs</p>
+        <p>When the results page loads the query is recorded since the user may read the results and then change their query to better fit their needs</p>
     </li>
     <li>
         <p>When the user clicked a link</p>
@@ -63,9 +66,15 @@ The Data structure (seen below) that is sent from the content script to the back
 
 **Ranking Specifics**
 ![Rankings](https://github.com/kylrbutlr/Extension_app/blob/master/images/pasted%20image%200.png)
+>Bill cosby was used to demonstrate the different types of search results that can appear to the user.
 
+As seen in the above image, links are grouped by the main container that they inhabit, that is to say they will have the same rank. All sublinks that correlate to a main page (i.e. ones that take the user to different parts of the website) but are clearly still part of a root link will be grouped together (see Rank #2 in image). Also, all links that are contained in a multimedia container are grouped together( see Rank #1 and Rank #14). This method was chosen to allow inclusion of verticals (multimedia SERP injections) without compromising the integrity of the Search Engine metrics discussed below. 
 
 When the user clicks a link on the search engine results page this object is sent to the background script.
+
+When the begins the search on the search engine results page this object is sent to the background script.
+![object Example](https://github.com/kylrbutlr/Extension_app/blob/master/images/Screen%20Shot%202018-07-29%20at%202.39.55%20PM.png)
+
 (not finalized yet)
 
 ### Data mining and Cloud Computing Specifications:
@@ -76,6 +85,12 @@ Normalized Discounted Cumulative Gain is the metric we'll be using to evaluate e
 ![IDCG](https://wikimedia.org/api/rest_v1/media/math/render/svg/0dfdd91ad2b2e59fce87ed6d6e5fa8ddd2678a7b)
 
 ![nDCG](https://wikimedia.org/api/rest_v1/media/math/render/svg/b3510c9c5cf42ee8820d65335675cada51b40736)
+
+**Cloud DataBase**
+For this project we will use a cloud based database to record the user interactions with the search engines. This 
+database will likely be hosted on Amazon Web Services. The 
+
+The data we are recording are user records; hence, there is little need for Normal form
 
 (not finalized yet)
 
