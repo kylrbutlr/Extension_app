@@ -1,6 +1,7 @@
 # Evaluating The Effectiveness Of Internet Search Engines:
 
-This is an Extension for tracking user input on search engines such as Google, Bing, etc.
+This is an Extension for tracking user input on search engines such as Google, Bing, and Baidu.
+The extension is only available on chrome and currently has no backend.
 
 ## Introduction:
 
@@ -60,6 +61,9 @@ The Data structure (seen below) that is sent from the content script to the back
         <p>The search results page number</p>
     </li>
 </ul>
+
+**Ranking Specifics**
+![Rankings]()
 
 When the user clicks a link on the search engine results page this object is sent to the background script.
 (not finalized yet)
