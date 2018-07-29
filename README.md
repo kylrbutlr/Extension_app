@@ -64,13 +64,15 @@ The Data structure (seen below) that is sent from the content script to the back
     </li>
 </ul>
 
-**Ranking Specifics**
+**Ranking Specifics:**
+
 ![Rankings](https://github.com/kylrbutlr/Extension_app/blob/master/images/pasted%20image%200.png)
 >Bill cosby was used to demonstrate the different types of search results that can appear to the user.
 
 As seen in the above image, links are grouped by the main container that they inhabit, that is to say they will have the same rank. All sublinks that correlate to a main page (i.e. ones that take the user to different parts of the website) but are clearly still part of a root link will be grouped together (see Rank #2 in image). Also, all links that are contained in a multimedia container are grouped together( see Rank #1 and Rank #14). This method was chosen to allow inclusion of verticals (multimedia SERP injections) without compromising the integrity of the Search Engine metrics discussed below. 
 
 When the user clicks a link on the search engine results page this object is sent to the background script.
+![object Example](https://github.com/kylrbutlr/Extension_app/blob/master/images/Screen%20Shot%202018-07-29%20at%203.12.00%20PM.png)
 
 When the begins the search on the search engine results page this object is sent to the background script.
 ![object Example](https://github.com/kylrbutlr/Extension_app/blob/master/images/Screen%20Shot%202018-07-29%20at%202.39.55%20PM.png)
@@ -86,11 +88,33 @@ Normalized Discounted Cumulative Gain is the metric we'll be using to evaluate e
 
 ![nDCG](https://wikimedia.org/api/rest_v1/media/math/render/svg/b3510c9c5cf42ee8820d65335675cada51b40736)
 
-**Cloud DataBase**
-For this project we will use a cloud based database to record the user interactions with the search engines. This 
-database will likely be hosted on Amazon Web Services. The 
+**Cloud DataBase:**
 
-The data we are recording are user records; hence, there is little need for Normal form
+For this project we will use a cloud based database to record the user interactions with the search engines. This 
+database will likely be hosted on Amazon Web Services. The database will be a relational database that supports SQL.
+
+>The data we are recording are user records; hence, there is little need for Normal form since these records will not be mutated. Normal form may be used later on if we feel the need to save storage space.
+
+Here is a mockup of what the data tables might look like:
+ 
+**ClickedLink Table:**
+    
+type | href | query | engine | rank | timeClicked | currentPage | linkType | tab | userId 
+---|---|---|---|---|---|---|---|---|---|
+(TEXT) | (TEXT) | (TEXT) | (TEXT) | (INT) | (TIMESTAMP) | (INT) | (TEXT) | (TEXT) | (INT) 
+(TEXT) | (TEXT) | (TEXT) | (TEXT) | (INT) | (TIMESTAMP) | (INT) | (TEXT) | (TEXT) | (INT) 
+(TEXT) | (TEXT) | (TEXT) | (TEXT) | (INT) | (TIMESTAMP) | (INT) | (TEXT) | (TEXT) | (INT) 
+
+
+**SearchQuery Table:**
+
+type | query | engine | rank | timestamp | currentPage | orderedResults | tab | userId 
+---|---|---|---|---|---|---|---|---|
+(TEXT) | (TEXT) | (TEXT) | (INT) | (TIMESTAMP) | (INT) | (TEXT) | (TEXT) | (INT) 
+(TEXT) | (TEXT) | (TEXT) | (INT) | (TIMESTAMP) | (INT) | (TEXT) | (TEXT) | (INT) 
+(TEXT) | (TEXT) | (TEXT) | (INT) | (TIMESTAMP) | (INT) | (TEXT) | (TEXT) | (INT) 
+
+>Where orderedResults is a delimited string respresentation of the 2D matrix.
 
 (not finalized yet)
 
